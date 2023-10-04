@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Automata</title>
     <link rel="stylesheet" href="./css/styles.css">
-    <script src="./script.js"></script>
 </head>
 <body>
     <header>
         <section class="leftSection">
             <input type="text" id="word-text" class="word-input" placeholder="enter your word">
-            <button id="word-button" class="word-button">Go!</button>
+            <button id="word-button" class="word-button"></button>
         </section>
         <section class="rightSection">
             <div>
-                <select class="languanges-select" name="languange">
-                    <option value="English">English</option>
-                    <option value="Spanish">Spanish</option>
+                <select class="languanges-select" id="languanges-select" name="languange">
+                    <option value="en" id="English"></option>
+                    <option value="es" id="Spanish"></option>
+                    <option value="fr" id="French"></option>
                 </select>
             </div>
         </section>
@@ -25,8 +25,8 @@
     <main>
         <section class="information">
             <section class="w-information">
-                <h3 class="word-checking" id="word-checking">abababba</h3>
-                <span class="symbol-checking" id="symbol-checking"> b</span>
+                <h3 class="word-checking" id="word-checking"></h3>
+                <span class="symbol-checking" id="symbol-checking"></span>
             </section>
             <section class="speed-control">
                 <span>-</span>
@@ -38,7 +38,7 @@
         <aside class="historial">
             <div>
                 <section class="historial-tittle">
-                    <h2>Historial</h2>
+                    <h2 id="historyTittle"></h2>
                 </section>
                 <section class="historial-list">
                     <p class="historial-tile">abbebababa <span class="w-validated">V</span></p>
@@ -70,9 +70,9 @@
         </aside>
     </main>
     <footer>
-        <h2>
-           Our regular expresion is: a(abUabb)^3
+        <h2 id="regularExpressionInfo">
         </h2>
     </footer>
+    <script src="./script.js"></script>
 </body>
 </html>
