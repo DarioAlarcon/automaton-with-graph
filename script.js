@@ -176,6 +176,41 @@ function changeLanguage(language) {
 
 changeLanguage('en');
 
+function createHistoryTileItem(userWord){
+    const newParagraph = document.createElement('p');
+    newParagraph.classList.add('historial-tile'); // Agrega la clase "historial-tile"
+    newParagraph.textContent = userWord;
+    return newParagraph;
+}
+
+function createHistoryTileSpan(isValidate){
+    const newSpan = document.createElement('span');
+    if(isValidate){
+        newSpan.classList.add('w-validated');
+        newSpan.textContent = 'V'
+    }else{
+        newSpan.classList.add('w-rejected');
+        newSpan.textContent = 'R'
+    };
+    return newSpan;
+}
+
+function insertSpanInParagraph(paragraph, span){
+    paragraph.appendChild(span);
+}
+
+function insertParagraphIntoDOM(paragraph){
+    const container = document.getElementById('historial-list'); // Obtén el contenedor donde deseas insertar
+    container.appendChild(paragraph);
+}
+
+function createHistoryTile(userWord, isValidate){
+    var historyTile = createHistoryTileItem(userWord);
+    var historyTileSpan = createHistoryTileSpan(isValidate);
+    insertSpanInParagraph(historyTile,historyTileSpan);
+    insertParagraphIntoDOM(historyTile)
+}
+
 selectLanguage = document.getElementById('languanges-select')
 selectLanguage.addEventListener('change', function () {
     selectedLanguage = selectLanguage.value;
@@ -194,6 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
         input.value = ""
         console.log(`La cadena "${valorInput}" es ${automaton.processInput(valorInput) ? 'aceptada' : 'rechazada'}`);
         speakResult(automaton.processInput(valorInput))
+        createHistoryTile(valorInput,automaton.processInput(valorInput) )
         print_letter(valorInput)
     });
 
