@@ -50,7 +50,7 @@ header{
     background-color: var(--main-purple);
     border: none;
     height: 40px;
-    width: 90px;
+    min-width: 90px;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -194,13 +194,13 @@ main {
   }
   
   .contenedor::-webkit-scrollbar {
-    width: 0.5em; /* Ancho del indicador de scroll (ajusta según tus preferencias) */
+    width: 0.5em; 
   }
   
   .contenedor::-webkit-scrollbar-thumb {
-    background-color: transparent; /* Color del indicador de scroll */
+    background-color: transparent; 
   }::-webkit-scrollbar-thumb {
-    background-color: transparent; /* Color del indicador de scroll */
+    background-color: transparent; 
   }
 
   .historial-tile{
