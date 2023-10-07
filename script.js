@@ -26,7 +26,7 @@ class Automaton {
             const transition = this.transitions.find(t => t.fromState === this.currentState && t.symbol === symbol);
             if (!transition) {
                 this.currentState=q0
-                return false; // Transición no definida
+                return false; 
             }
             this.currentState = transition.toState;
         }
@@ -86,66 +86,30 @@ const q15 = new State('q15', true);
 const q16 = new State('q16', false)
 
 const transitions = [
-    new Transition(q0, q1, 'a'),
-    new Transition(q1, q2, 'b'),
-    new Transition(q2, q3, 'b'),
-    new Transition(q3, q4, 'a'),
-    new Transition(q4, q5, 'b'),
-    new Transition(q5, q6, 'b'),
-    new Transition(q6, q7, 'a'),
-    new Transition(q7, q8, 'b'),
-    new Transition(q8, q9, 'b'),
-    new Transition(q9, q10, 'a'),
-    new Transition(q2, q11, 'a'),
+    new Transition(q0,  q1,  'a'),
+    new Transition(q1,  q2,  'b'),
+    new Transition(q2,  q3,  'b'),
+    new Transition(q3,  q4,  'a'),
+    new Transition(q4,  q5,  'b'),
+    new Transition(q5,  q6,  'b'),
+    new Transition(q6,  q7,  'a'),
+    new Transition(q7,  q8,  'b'),
+    new Transition(q8,  q9,  'b'),
+    new Transition(q9,  q10, 'a'),
+    new Transition(q2,  q11, 'a'),
     new Transition(q11, q12, 'b'),
     new Transition(q12, q13, 'a'),
     new Transition(q13, q14, 'b'),
     new Transition(q14, q15, 'a'),
-    new Transition(q5, q13, 'a'),
-    new Transition(q12, q6, 'b'),
-    new Transition(q8, q15, 'a'),
-    new Transition(q14, q9, 'b'),
+    new Transition(q5,  q13, 'a'),
+    new Transition(q12, q6,  'b'),
+    new Transition(q8,  q15, 'a'),
+    new Transition(q14, q9,  'b'),
 ];
 
 const synth = window.speechSynthesis;
 const states = [q0, q1, q2];
 const automaton = new Automaton(states, transitions, q0);
-
-//^0
-var input1 = 'a'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-//^1
-var input1 = 'aba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input2 = 'abba'; 
-console.log(`La cadena "${input2}" es ${automaton.processInput(input2) ? 'aceptada' : 'rechazada'}`);
-//^2
-var input1 = 'ababa'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'ababba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'abbaba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'abbabba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-//^2
-var input1 = 'abababa'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'abababba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'ababbaba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'ababbabba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'abbababa'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'abbababba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'abbabbaba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-var input1 = 'abbabbabba'; 
-console.log(`La cadena "${input1}" es ${automaton.processInput(input1) ? 'aceptada' : 'rechazada'}`);
-
 
 function speakResult(isValidateWord){
     var text
@@ -156,9 +120,9 @@ function speakResult(isValidateWord){
     }
     const utterance = new SpeechSynthesisUtterance(text);
     
-    utterance.volume = 1; // Volumen (0 a 1)
-    utterance.rate = 1;   // Velocidad (0.1 a 10)
-    utterance.pitch = 1;  // Tono (0 a 2)
+    utterance.volume = 1; 
+    utterance.rate = 1;   
+    utterance.pitch = 1;  
     synth.speak(utterance);
 }
 
@@ -178,7 +142,7 @@ changeLanguage('en');
 
 function createHistoryTileItem(userWord){
     const newParagraph = document.createElement('p');
-    newParagraph.classList.add('historial-tile'); // Agrega la clase "historial-tile"
+    newParagraph.classList.add('historial-tile'); 
     newParagraph.textContent = userWord;
     return newParagraph;
 }
@@ -200,7 +164,7 @@ function insertSpanInParagraph(paragraph, span){
 }
 
 function insertParagraphIntoDOM(paragraph){
-    const container = document.getElementById('historial-list'); // Obtén el contenedor donde deseas insertar
+    const container = document.getElementById('historial-list');
     container.appendChild(paragraph);
 }
 
@@ -227,28 +191,133 @@ document.addEventListener("DOMContentLoaded", function() {
         var expression = document.getElementById("word-checking")
         expression.innerText = valorInput
         input.value = ""
-        console.log(`La cadena "${valorInput}" es ${automaton.processInput(valorInput) ? 'aceptada' : 'rechazada'}`);
-        speakResult(automaton.processInput(valorInput))
-        createHistoryTile(valorInput,automaton.processInput(valorInput) )
-        print_letter(valorInput)
+        print_letter(valorInput).then(function() {
+            console.log(`La cadena "${valorInput}" es ${automaton.processInput(valorInput) ? 'aceptada' : 'rechazada'}`);
+            speakResult(automaton.processInput(valorInput));
+            createHistoryTile(valorInput, automaton.processInput(valorInput));
+        });
     });
 
     function print_letter(wordToValidate) {
-        var speed = get_speed()
-        for (var i = 0; i < wordToValidate.length; i++) {
-            (function(index) {
-                setTimeout(function() {
+        return new Promise(function(resolve) {
+            var speed = get_speed();
+            var index = 0;
+            function printNextLetter() {
+                if (index < wordToValidate.length) {
                     var letra = wordToValidate[index];
-                    var symbol = document.getElementById("symbol-checking")
+                    var symbol = document.getElementById("symbol-checking");
                     symbol.innerText = letra;
-                }, i * speed);
-            })(i);
-        }
+                    index++;
+                    setTimeout(printNextLetter, speed);
+                } else {
+                    resolve();
+                }
+            }
+            printNextLetter();
+        });
     }
-
     function get_speed(){
         const slider = document.getElementById("slider");
         const tiempoSeleccionado = parseFloat(slider.value) * 1000; 
         return tiempoSeleccionado;
     }
 });
+
+
+
+// Importa la biblioteca GoJS
+//const go = require('gojs');
+
+// Crea un objeto Diagram
+const $ = go.GraphObject.make;
+
+const myDiagram = $(go.Diagram, "myDiagram", {
+    initialContentAlignment: go.Spot.Center,
+    "undoManager.isEnabled": true
+});
+
+// Define un nodo con una propiedad de texto
+myDiagram.nodeTemplate =
+    $(go.Node, "Auto",
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+        $(go.Shape, "Circle", 
+            { width: 30, height: 30, strokeWidth: 2 },
+            {  fill:  "white" },
+            new go.Binding("stroke", "color"),
+            ),
+        $(go.TextBlock,  // Vincula el TextBlock a la propiedad "name" del nodo
+            { margin: 10 },  // Ajusta el margen para que el texto no se superponga al borde del nodo
+            new go.Binding("text", "name")  // Vincula la propiedad "name" del nodo al texto del TextBlock
+        )
+    );
+
+// Añade tres nodos al grafo con textos diferentes
+myDiagram.model.addNodeData({ key: "_",  name: "" , color: "transparent", loc: "-1100 -10" });
+myDiagram.model.addNodeData({ key: "q0",  name: "q0" , color: "purple", loc: "-1030 -10" });
+myDiagram.model.addNodeData({ key: "q1",  name: "q1" , color: "red",   loc: "-960 -10"  });
+myDiagram.model.addNodeData({ key: "q2",  name: "q2" , color: "purple", loc: "-890 -10"  });
+myDiagram.model.addNodeData({ key: "q3",  name: "q3" , color: "purple", loc: "-820 -10"  });
+myDiagram.model.addNodeData({ key: "q4",  name: "q4" , color: "red",   loc: "-750 -10"  });
+myDiagram.model.addNodeData({ key: "q5",  name: "q5" , color: "purple", loc: "-680 -10"  });
+myDiagram.model.addNodeData({ key: "q6",  name: "q6" , color: "purple", loc: "-610 -10"  });
+myDiagram.model.addNodeData({ key: "q7",  name: "q7" , color: "red",   loc: "-540 -10"  });
+myDiagram.model.addNodeData({ key: "q8",  name: "q8" , color: "purple", loc: "-470 -10"  });
+myDiagram.model.addNodeData({ key: "q9",  name: "q9" , color: "purple", loc: "-400 -10"  });
+myDiagram.model.addNodeData({ key: "q10", name: "q10", color: "red",   loc: "-330 -10"     });
+myDiagram.model.addNodeData({ key: "q11", name: "q11", color: "red",   loc: "-855 50"   });
+myDiagram.model.addNodeData({ key: "q12", name: "q12", color: "purple", loc: "-785 100"  });
+myDiagram.model.addNodeData({ key: "q13", name: "q13", color: "red",   loc: "-715 150"  });
+myDiagram.model.addNodeData({ key: "q14", name: "q14", color: "purple", loc: "-645 200"  });
+myDiagram.model.addNodeData({ key: "q15", name: "q15", color: "red",   loc: "-575 250"  });
+// Define un enlace
+myDiagram.linkTemplate =
+    $(go.Link,
+        $(go.Shape, { stroke: "grey" }),
+        $(go.Shape, { toArrow: "Standard" }),
+        $(go.Panel, "Auto",  // visual hint that the user can do something with this link label
+          $(go.Shape,  // the label background, which becomes transparent around the edges
+            {
+              fill: $(go.Brush, "Radial",
+                { 0: "rgb(240, 240, 240)", 0.3: "rgb(240, 240, 240)", 1: "rgba(240, 240, 240, 0)" }),
+              stroke: null
+            }),
+          $(go.TextBlock, "",  // the label text
+            {
+              textAlign: "center",
+              font: "10pt helvetica, arial, sans-serif",
+              stroke: "black",
+              margin: 4, // editing the text automatically updates the model data
+            },
+            new go.Binding("text", "text").makeTwoWay()),
+          // The GraphObject.segmentOffset property is what the LinkLabelDraggingTool modifies.
+          // This TwoWay binding saves any changes to the same named property on the link data.
+          new go.Binding("segmentOffset", "segmentOffset", go.Point.parse).makeTwoWay(go.Point.stringify)
+        )
+            
+    );
+
+// Añade enlaces al grafo
+myDiagram.model.addLinkData({ from: "_",  to: "q0"  });
+myDiagram.model.addLinkData({ from: "q0",  to: "q1"  , text: "a"});
+myDiagram.model.addLinkData({ from: "q1",  to: "q2"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q2",  to: "q3"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q3",  to: "q4"  , text: "a"});
+myDiagram.model.addLinkData({ from: "q4",  to: "q5"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q5",  to: "q6"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q6",  to: "q7"  , text: "a"});
+myDiagram.model.addLinkData({ from: "q7",  to: "q8"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q8",  to: "q9"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q9",  to: "q10" , text: "a"});
+myDiagram.model.addLinkData({ from: "q2",  to: "q11" , text: "a"});
+myDiagram.model.addLinkData({ from: "q11", to: "q12" , text: "b"});
+myDiagram.model.addLinkData({ from: "q12", to: "q13" , text: "a"});
+myDiagram.model.addLinkData({ from: "q13", to: "q14" , text: "b"});
+myDiagram.model.addLinkData({ from: "q14", to: "q15" , text: "a"});
+myDiagram.model.addLinkData({ from: "q12", to: "q6"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q5",  to: "q13" , text: "a"});
+myDiagram.model.addLinkData({ from: "q14", to: "q9"  , text: "b"});
+myDiagram.model.addLinkData({ from: "q8",  to: "q15" , text: "a"});
+
+
+
+
