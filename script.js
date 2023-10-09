@@ -29,12 +29,15 @@ class Automaton {
                 return false; 
             }
             this.currentState = transition.toState;
+            console.log(symbol)
         }
         var result= this.currentState.isAccepting;
         this.currentState=q0
          return result;
     }
 }
+
+
 
 
 const languages = {
@@ -86,32 +89,32 @@ const q15 = new State('q15', true);
 const q16 = new State('q16', false)
 
 const transitions = [
-    new Transition(q0,  q1,  'a'),
-    new Transition(q1,  q2,  'b'),
-    new Transition(q2,  q3,  'b'),
-    new Transition(q3,  q4,  'a'),
-    new Transition(q4,  q5,  'b'),
-    new Transition(q5,  q6,  'b'),
-    new Transition(q6,  q7,  'a'),
-    new Transition(q7,  q8,  'b'),
-    new Transition(q8,  q9,  'b'),
-    new Transition(q9,  q10, 'a'),
-    new Transition(q2,  q11, 'a'),
-    new Transition(q11, q12, 'b'),
-    new Transition(q12, q13, 'a'),
-    new Transition(q13, q14, 'b'),
-    new Transition(q14, q15, 'a'),
-    new Transition(q5,  q13, 'a'),
-    new Transition(q12, q6,  'b'),
-    new Transition(q8,  q15, 'a'),
-    new Transition(q14, q9,  'b'),
+    new Transition("q0",  "q1",  'a'),
+    new Transition("q1",  "q2",  'b'),
+    new Transition("q2",  "q3",  'b'),
+    new Transition("q3",  "q4",  'a'),
+    new Transition("q4",  "q5",  'b'),
+    new Transition("q5",  "q6",  'b'),
+    new Transition("q6",  "q7",  'a'),
+    new Transition("q7",  "q8",  'b'),
+    new Transition("q8",  "q9",  'b'),
+    new Transition("q9",  "q10", 'a'),
+    new Transition("q2",  "q11", 'a'),
+    new Transition("q11", "q12", 'b'),
+    new Transition("q12", "q13", 'a'),
+    new Transition("q13", "q14", 'b'),
+    new Transition("q14", "q15", 'a'),
+    new Transition("q5",  "q13", 'a'),
+    new Transition("q12", "q6",  'b'),
+    new Transition("q8",  "q15", 'a'),
+    new Transition("q14", "q9",  'b'),
 ];
 
-const synth = window.speechSynthesis;
-const states = [q0, q1, q2];
-const automaton = new Automaton(states, transitions, q0);
-
+const states = [q0, q1, q2, q3, q4, q5, q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16];
+const initialState = states.find((state) => state.name === "q0");
+const automaton = new Automaton(states, transitions, initialState);
 function speakResult(isValidateWord){
+    const synth = window.speechSynthesis;
     var text
     if(isValidateWord){
         text = "palabra válida"
@@ -125,7 +128,6 @@ function speakResult(isValidateWord){
     utterance.pitch = 1;  
     synth.speak(utterance);
 }
-
 
 function changeLanguage(language) {
     const currentLanguage = languages[language];
@@ -191,37 +193,143 @@ document.addEventListener("DOMContentLoaded", function() {
         var expression = document.getElementById("word-checking")
         expression.innerText = valorInput
         input.value = ""
-        print_letter(valorInput).then(function() {
-            console.log(`La cadena "${valorInput}" es ${automaton.processInput(valorInput) ? 'aceptada' : 'rechazada'}`);
-            speakResult(automaton.processInput(valorInput));
-            createHistoryTile(valorInput, automaton.processInput(valorInput));
-        });
+        processString(valorInput);
     });
 
-    function print_letter(wordToValidate) {
-        return new Promise(function(resolve) {
-            var speed = get_speed();
-            var index = 0;
-            function printNextLetter() {
-                if (index < wordToValidate.length) {
-                    var letra = wordToValidate[index];
-                    var symbol = document.getElementById("symbol-checking");
-                    symbol.innerText = letra;
-                    index++;
-                    setTimeout(printNextLetter, speed);
-                } else {
-                    resolve();
-                }
-            }
-            printNextLetter();
-        });
+    async function processString(wordToValidate) {
+        automaton.currentState = initialState; 
+        for (let index = 0; index < wordToValidate.length; index++) {
+          const symbolSpan = document.getElementById('symbol-checking')
+          const symbolOrderSpan = document.getElementById('symbol-checking-number')
+          const symbol = wordToValidate[index];
+          const symbolOrder = index + 1;
+          const transition = automaton.transitions.find(
+            (t) => t.fromState === automaton.currentState.name && t.symbol === symbol
+          );
+      
+          //currentStateElement.innerText = automaton.currentState.name;
+          await sleep(get_speed());
+          symbolSpan.innerText = symbol;
+          symbolOrderSpan.innerText = symbolOrder;
+          if (transition) {
+            //transitionElement.innerText = `${automaton.currentState.name} -> ${transition.toState}`;
+            //currentStateElement.innerText = transition.toState;
+            automaton.currentState = states.find(
+              (state) => state.name === transition.toState
+            );
+          } else {
+            //transitionElement.innerText = '';
+            automaton.currentState = initialState; // Si no hay transición, regresamos al estado inicial
+          }
+      
+          await sleep(get_speed());
+      
+          if (!transition) {
+            //console.log(`La cadena "${wordToValidate}" es rechazada`);
+            speakResult(false);
+            createHistoryTile(wordToValidate, false);
+            return;
+          }
+        }
+      
+        console.log(
+          `La cadena "${wordToValidate}" es ${
+            automaton.currentState.isAccepting ? "aceptada" : "rechazada"
+          }`
+        );
+        
+        speakResult(automaton.currentState.isAccepting);
+        createHistoryTile(wordToValidate, automaton.currentState.isAccepting);
+        
     }
+
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
     function get_speed(){
         const slider = document.getElementById("slider");
         const tiempoSeleccionado = parseFloat(slider.value) * 1000; 
         return tiempoSeleccionado;
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
