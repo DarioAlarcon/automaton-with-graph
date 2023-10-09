@@ -187,7 +187,6 @@ selectLanguage.addEventListener('change', function () {
 document.addEventListener("DOMContentLoaded", function() {
     boton = document.getElementById("word-button");
     var input = document.getElementById("word-text");
-    
     boton.addEventListener("click", function() {
         var valorInput = input.value;
         var expression = document.getElementById("word-checking")
@@ -206,7 +205,8 @@ document.addEventListener("DOMContentLoaded", function() {
           const transition = automaton.transitions.find(
             (t) => t.fromState === automaton.currentState.name && t.symbol === symbol
           );
-      
+          showCurrentNodeGraph(automaton.currentState.name)
+          
           //currentStateElement.innerText = automaton.currentState.name;
           await sleep(get_speed());
           symbolSpan.innerText = symbol;
@@ -216,7 +216,8 @@ document.addEventListener("DOMContentLoaded", function() {
             //currentStateElement.innerText = transition.toState;
             automaton.currentState = states.find(
               (state) => state.name === transition.toState
-            );
+              );
+            showCurrentNodeGraph(automaton.currentState.name)
           } else {
             //transitionElement.innerText = '';
             automaton.currentState = initialState; // Si no hay transición, regresamos al estado inicial
@@ -243,10 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
     }
 
-    function sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
+    
     function get_speed(){
         const slider = document.getElementById("slider");
         const tiempoSeleccionado = parseFloat(slider.value) * 1000; 
@@ -254,83 +252,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 
 // Importa la biblioteca GoJS
@@ -352,6 +276,7 @@ myDiagram.nodeTemplate =
             { width: 30, height: 30, strokeWidth: 2 },
             {  fill:  "white" },
             new go.Binding("stroke", "color"),
+            new go.Binding("fill", "isSelected", (s, obj) => s ? "#BEAEE2" : "white").ofObject()
             ),
         $(go.TextBlock,  // Vincula el TextBlock a la propiedad "name" del nodo
             { margin: 10 },  // Ajusta el margen para que el texto no se superponga al borde del nodo
@@ -429,3 +354,9 @@ myDiagram.model.addLinkData({ from: "q8",  to: "q15" , text: "a"});
 
 
 
+async function showCurrentNodeGraph(key){
+    const currentNode = myDiagram.findNodeForKey(key);
+    currentNode.isSelected = true
+    await sleep(1000)
+    currentNode.isSelected = false
+}
