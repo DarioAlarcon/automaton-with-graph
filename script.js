@@ -189,8 +189,8 @@ selectLanguage.addEventListener('change', function () {
 document.addEventListener("DOMContentLoaded", function() {
     boton = document.getElementById("word-button");
     var input = document.getElementById("word-text");
-    highlightLinkBetweenNodes("q9","q10")
-    showCurrentLinkTemplate("q0")
+    var hi = highlightLinkBetweenNodes("q9","q10")
+    console.log(hi)
     boton.addEventListener("click", function() {
         var valorInput = input.value;
         var expression = document.getElementById("word-checking")
@@ -216,6 +216,8 @@ document.addEventListener("DOMContentLoaded", function() {
           symbolSpan.innerText = symbol;
           symbolOrderSpan.innerText = symbolOrder;
           if (transition) {
+            var keyNodeTransiction=highlightLinkBetweenNodes(automaton.currentState.name,transition.toState)
+            showCurrentNodeGraph(keyNodeTransiction)
             //transitionElement.innerText = `${automaton.currentState.name} -> ${transition.toState}`;
             //currentStateElement.innerText = transition.toState;
             automaton.currentState = states.find(
@@ -275,6 +277,7 @@ const myDiagram = $(go.Diagram, "myDiagram", {
 // Define un nodo con una propiedad de texto
 myDiagram.nodeTemplate =
     $(go.Node, "Auto",
+        {movable: false},
         new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
         $(go.Shape, "Circle", 
             { width: 30, height: 30, strokeWidth: 2 },
@@ -306,12 +309,34 @@ myDiagram.model.addNodeData({ key: "q12", name: "q12", color: "purple", loc: "-7
 myDiagram.model.addNodeData({ key: "q13", name: "q13", color: "red",   loc: "-715 150"  });
 myDiagram.model.addNodeData({ key: "q14", name: "q14", color: "purple", loc: "-645 200"  });
 myDiagram.model.addNodeData({ key: "q15", name: "q15", color: "red",   loc: "-575 250"  });
+
+
+
+myDiagram.model.addNodeData({ key: "T1", color:"transparent", loc: "-995 -10"  });
+myDiagram.model.addNodeData({ key: "T2", color:"transparent", loc: "-925 -10"  });
+myDiagram.model.addNodeData({ key: "T3", color:"transparent", loc: "-855 -10"  });
+myDiagram.model.addNodeData({ key: "T4", color:"transparent", loc: "-785 -10"  });
+myDiagram.model.addNodeData({ key: "T5", color:"transparent", loc: "-715 -10"  });
+myDiagram.model.addNodeData({ key: "T6", color:"transparent", loc: "-645 -10"  });
+myDiagram.model.addNodeData({ key: "T7", color:"transparent", loc: "-575 -10"  });
+myDiagram.model.addNodeData({ key: "T8", color:"transparent", loc: "-505 -10"  });
+myDiagram.model.addNodeData({ key: "T9", color:"transparent", loc: "-435 -10"  });
+myDiagram.model.addNodeData({ key: "T10", color:"transparent", loc: "-365 -10"  });
+myDiagram.model.addNodeData({ key: "T11", color:"transparent", loc: "-872 20"  });
+myDiagram.model.addNodeData({ key: "T12", color:"transparent", loc: "-820 75"  });
+myDiagram.model.addNodeData({ key: "T13", color:"transparent", loc: "-750 125"  });
+myDiagram.model.addNodeData({ key: "T14", color:"transparent", loc: "-680 175"  });
+myDiagram.model.addNodeData({ key: "T15", color:"transparent", loc: "-610 222"  });
+myDiagram.model.addNodeData({ key: "T16", color:"transparent", loc: "-697 40"  });
+myDiagram.model.addNodeData({ key: "T17", color:"transparent", loc:  "-695 70" });
+myDiagram.model.addNodeData({ key: "T18", color:"transparent",  loc: "-522 90"  });
+myDiagram.model.addNodeData({ key: "T19", color:"transparent", loc:  "-520 120" });
 // Define un enlace
 myDiagram.linkTemplate =
     $(go.Link,
         $(go.Shape, { 
         stroke: "gray"},
-        new go.Binding("stroke", "isHighlighted", fla => fla ? "red" : "gray").ofObject()
+        new go.Binding("stroke", "isHighlighted", fla => fla ? "red" : "gray")
     ),
         $(go.Shape, { toArrow: "Standard" }),
         $(go.Panel, "Auto",  // visual hint that the user can do something with this link label
@@ -340,25 +365,25 @@ myDiagram.linkTemplate =
 
 // Añade enlaces al grafo
 myDiagram.model.addLinkData({ from: "_",  to: "q0"  });
-myDiagram.model.addLinkData({ from: "q0",  to: "q1"  , text: "a"});
-myDiagram.model.addLinkData({ from: "q1",  to: "q2"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q2",  to: "q3"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q3",  to: "q4"  , text: "a"});
-myDiagram.model.addLinkData({ from: "q4",  to: "q5"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q5",  to: "q6"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q6",  to: "q7"  , text: "a"});
-myDiagram.model.addLinkData({ from: "q7",  to: "q8"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q8",  to: "q9"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q9",  to: "q10" , text: "a"});
-myDiagram.model.addLinkData({ from: "q2",  to: "q11" , text: "a"});
-myDiagram.model.addLinkData({ from: "q11", to: "q12" , text: "b"});
-myDiagram.model.addLinkData({ from: "q12", to: "q13" , text: "a"});
-myDiagram.model.addLinkData({ from: "q13", to: "q14" , text: "b"});
-myDiagram.model.addLinkData({ from: "q14", to: "q15" , text: "a"});
-myDiagram.model.addLinkData({ from: "q12", to: "q6"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q5",  to: "q13" , text: "a"});
-myDiagram.model.addLinkData({ from: "q14", to: "q9"  , text: "b"});
-myDiagram.model.addLinkData({ from: "q8",  to: "q15" , text: "a"});
+myDiagram.model.addLinkData({ from: "q0",  to: "q1"  , text: "a", key:"T1"});
+myDiagram.model.addLinkData({ from: "q1",  to: "q2"  , text: "b", key:"T2"});
+myDiagram.model.addLinkData({ from: "q2",  to: "q3"  , text: "b", key:"T3"});
+myDiagram.model.addLinkData({ from: "q3",  to: "q4"  , text: "a", key:"T4"});
+myDiagram.model.addLinkData({ from: "q4",  to: "q5"  , text: "b", key:"T5"});
+myDiagram.model.addLinkData({ from: "q5",  to: "q6"  , text: "b", key:"T6"});
+myDiagram.model.addLinkData({ from: "q6",  to: "q7"  , text: "a", key:"T7"});
+myDiagram.model.addLinkData({ from: "q7",  to: "q8"  , text: "b", key:"T8"});
+myDiagram.model.addLinkData({ from: "q8",  to: "q9"  , text: "b", key:"T9"});
+myDiagram.model.addLinkData({ from: "q9",  to: "q10" , text: "a", key:"T10"});
+myDiagram.model.addLinkData({ from: "q2",  to: "q11" , text: "a", key:"T11"});
+myDiagram.model.addLinkData({ from: "q11", to: "q12" , text: "b", key:"T12"});
+myDiagram.model.addLinkData({ from: "q12", to: "q13" , text: "a", key:"T13"});
+myDiagram.model.addLinkData({ from: "q13", to: "q14" , text: "b", key:"T14"});
+myDiagram.model.addLinkData({ from: "q14", to: "q15" , text: "a", key:"T15"});
+myDiagram.model.addLinkData({ from: "q12", to: "q6"  , text: "b", key:"T16"});
+myDiagram.model.addLinkData({ from: "q5",  to: "q13" , text: "a", key:"T17"});
+myDiagram.model.addLinkData({ from: "q14", to: "q9"  , text: "b", key:"T18"});
+myDiagram.model.addLinkData({ from: "q8",  to: "q15" , text: "a", key:"T19"});
 
 
 
@@ -366,18 +391,10 @@ myDiagram.model.addLinkData({ from: "q8",  to: "q15" , text: "a"});
 async function showCurrentNodeGraph(key){
     const currentNode = myDiagram.findNodeForKey(key);
     currentNode.isSelected = true
-    await sleep(2000)
+    await sleep(1000)
     currentNode.isSelected = false
 }
 
-async function showCurrentLinkTemplate(begin){
-    const currentNode = myDiagram.findNodeForKey(begin);
-    const links = currentNode.findLinksOutOf(); // Encuentra los enlaces salientes del nodo actual
-    links.each(function(link) {
-        link.data.isHighlighted = true;
-    });
-    
-}
 
 function highlightLinkBetweenNodes(startNodeKey, endNodeKey) {
     const linkDataArray = myDiagram.model.linkDataArray;
@@ -388,14 +405,8 @@ function highlightLinkBetweenNodes(startNodeKey, endNodeKey) {
       console.log(linkData)
       if (linkData.from === startNodeKey && linkData.to === endNodeKey) {
         // Encontramos el enlace, así que lo resaltamos
-        linkData.text = "s"
-        linkData.isHighlighted = true; // Establece la propiedad "isHighlighted" en true
-        myDiagram.model.commit(function (m) {
-          m.set(linkData, "isHighlighted", true);
-        });
-        console.log(linkData)
-        myDiagram.requestUpdate(); // Actualiza la vista del diagrama
-        break; // Sal del bucle una vez que hayas encontrado el enlace
+        return linkData.key; // Actualiza la vista del diagrama
+         // Sal del bucle una vez que hayas encontrado el enlace
       }
     }
   }
