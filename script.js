@@ -70,6 +70,8 @@ const languages = {
     },
 };
 
+const True = true
+
 const q0  = new State('q0', false);
 const q1  = new State('q1', true);
 const q2  = new State('q2', false);
@@ -187,6 +189,8 @@ selectLanguage.addEventListener('change', function () {
 document.addEventListener("DOMContentLoaded", function() {
     boton = document.getElementById("word-button");
     var input = document.getElementById("word-text");
+    highlightLinkBetweenNodes("q9","q10")
+    showCurrentLinkTemplate("q0")
     boton.addEventListener("click", function() {
         var valorInput = input.value;
         var expression = document.getElementById("word-checking")
@@ -217,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function() {
             automaton.currentState = states.find(
               (state) => state.name === transition.toState
               );
-            showCurrentNodeGraph(automaton.currentState.name)
+            //showCurrentNodeGraph(automaton.currentState.name)
           } else {
             //transitionElement.innerText = '';
             automaton.currentState = initialState; // Si no hay transición, regresamos al estado inicial
@@ -238,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function() {
             automaton.currentState.isAccepting ? "aceptada" : "rechazada"
           }`
         );
-        
+        showCurrentNodeGraph(automaton.currentState.name)
         speakResult(automaton.currentState.isAccepting);
         createHistoryTile(wordToValidate, automaton.currentState.isAccepting);
         
@@ -305,7 +309,10 @@ myDiagram.model.addNodeData({ key: "q15", name: "q15", color: "red",   loc: "-57
 // Define un enlace
 myDiagram.linkTemplate =
     $(go.Link,
-        $(go.Shape, { stroke: "grey" }),
+        $(go.Shape, { 
+        stroke: "gray"},
+        new go.Binding("stroke", "isHighlighted", fla => fla ? "red" : "gray").ofObject()
+    ),
         $(go.Shape, { toArrow: "Standard" }),
         $(go.Panel, "Auto",  // visual hint that the user can do something with this link label
           $(go.Shape,  // the label background, which becomes transparent around the edges
@@ -313,7 +320,9 @@ myDiagram.linkTemplate =
               fill: $(go.Brush, "Radial",
                 { 0: "rgb(240, 240, 240)", 0.3: "rgb(240, 240, 240)", 1: "rgba(240, 240, 240, 0)" }),
               stroke: null
-            }),
+            },
+            ),
+            
           $(go.TextBlock, "",  // the label text
             {
               textAlign: "center",
@@ -357,6 +366,36 @@ myDiagram.model.addLinkData({ from: "q8",  to: "q15" , text: "a"});
 async function showCurrentNodeGraph(key){
     const currentNode = myDiagram.findNodeForKey(key);
     currentNode.isSelected = true
-    await sleep(1000)
+    await sleep(2000)
     currentNode.isSelected = false
 }
+
+async function showCurrentLinkTemplate(begin){
+    const currentNode = myDiagram.findNodeForKey(begin);
+    const links = currentNode.findLinksOutOf(); // Encuentra los enlaces salientes del nodo actual
+    links.each(function(link) {
+        link.data.isHighlighted = true;
+    });
+    
+}
+
+function highlightLinkBetweenNodes(startNodeKey, endNodeKey) {
+    const linkDataArray = myDiagram.model.linkDataArray;
+  
+    // Busca el enlace que conecta los nodos de inicio y final
+    for (let i = 0; i < linkDataArray.length; i++) {
+      const linkData = linkDataArray[i];
+      console.log(linkData)
+      if (linkData.from === startNodeKey && linkData.to === endNodeKey) {
+        // Encontramos el enlace, así que lo resaltamos
+        linkData.text = "s"
+        linkData.isHighlighted = true; // Establece la propiedad "isHighlighted" en true
+        myDiagram.model.commit(function (m) {
+          m.set(linkData, "isHighlighted", true);
+        });
+        console.log(linkData)
+        myDiagram.requestUpdate(); // Actualiza la vista del diagrama
+        break; // Sal del bucle una vez que hayas encontrado el enlace
+      }
+    }
+  }
